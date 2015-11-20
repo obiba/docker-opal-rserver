@@ -23,8 +23,9 @@ RUN \
   DEBIAN_FRONTEND=noninteractive apt-get install -y opal-rserver
 
 COPY bin /opt/obiba/bin
+COPY conf/Rserv.conf /var/lib/rserver/conf/Rserv.conf
 
-RUN chmod +x -R /opt/obiba/bin
+RUN chmod +x -R /opt/obiba/bin && chown rserver:adm /var/lib/rserver/conf/Rserv.conf
 
 # Define default command.
 ENTRYPOINT ["/opt/obiba/bin/start.sh"]
