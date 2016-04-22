@@ -42,6 +42,7 @@ COPY bin /opt/obiba/bin
 COPY conf/Rserv.conf /var/lib/rserver/conf/Rserv.conf
 
 RUN chmod +x -R /opt/obiba/bin && chown rserver:adm /var/lib/rserver/conf/Rserv.conf
+RUN chown -R rserver /opt/obiba
 
 VOLUME /srv
 

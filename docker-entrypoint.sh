@@ -2,7 +2,6 @@
 set -e
 
 if [ "$1" = 'app' ]; then
-	chown -R rserver /opt/obiba
     chown -R rserver "$RSERVER_HOME"
 
     exec gosu rserver /opt/obiba/bin/start.sh
