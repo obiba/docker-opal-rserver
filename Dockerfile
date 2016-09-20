@@ -30,6 +30,7 @@ ENV LANGUAGE C.UTF-8
 ENV LC_ALL C.UTF-8
 
 ENV RSERVER_HOME=/srv
+ENV JAVA_OPTS=-Xmx2G
 
 # Install R Server for Opal
 RUN \
