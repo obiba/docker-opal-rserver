@@ -39,7 +39,7 @@ RUN \
   wget -q -O - https://pkg.obiba.org/obiba.org.key | apt-key add - && \
   echo 'deb https://pkg.obiba.org stable/' | tee /etc/apt/sources.list.d/obiba.list && \
   apt-get update && \
-  DEBIAN_FRONTEND=noninteractive apt-get install -y rserver-admin=$(apt-cache madison rserver-admin | cut -d ' ' -f 3 | grep ${RSERVER_ADMIN_VERSION}) opal-rserver
+  DEBIAN_FRONTEND=noninteractive apt-get install -y rserver-admin=$(apt-cache madison rserver-admin | cut -d ' ' -f 3 | grep ${RSERVER_ADMIN_VERSION}-b) opal-rserver
 
 RUN chmod +x /usr/share/rserver/bin/rserver
 
