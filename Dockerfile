@@ -21,7 +21,7 @@ RUN set -x \
 	&& export GNUPGHOME="$(mktemp -d)" \
 	&& gpg --keyserver ha.pool.sks-keyservers.net --recv-keys B42F6819007F00F88E364FD4036A9C25BF357DD4 \
 	&& gpg --batch --verify /usr/local/bin/gosu.asc /usr/local/bin/gosu \
-	&& rm -r "$GNUPGHOME" /usr/local/bin/gosu.asc \
+	&& rm -rf "$GNUPGHOME" /usr/local/bin/gosu.asc \
 	&& chmod +x /usr/local/bin/gosu \
 	&& gosu nobody true
 
@@ -39,12 +39,12 @@ RUN \
   wget -q -O - https://pkg.obiba.org/obiba.org.key | apt-key add - && \
   echo 'deb https://pkg.obiba.org unstable/' | tee /etc/apt/sources.list.d/obiba.list && \
   apt-get update && \
-  DEBIAN_FRONTEND=noninteractive apt-get install -y opal-rserver
+  DEBIAN_FRONTEND=noninteractive apt-get install -y --allow-unauthenticated  opal-rserver
 
 RUN chmod +x /usr/share/rserver/bin/rserver
 
 COPY bin /opt/obiba/bin
-COPY conf/Rserv.conf /var/lib/rserver/conf/Rserv.conf
+COPY conf/Rserv.ls /tmp && conf /var/lib/rserver/conf/Rserv.conff
 
 RUN chmod +x -R /opt/obiba/bin && chown rserver:adm /var/lib/rserver/conf/Rserv.conf
 RUN chown -R rserver /opt/obiba
