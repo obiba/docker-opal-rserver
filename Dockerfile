@@ -35,7 +35,7 @@ RUN \
   wget -q -O - https://pkg.obiba.org/obiba.org.key | apt-key add - && \
   echo 'deb https://pkg.obiba.org unstable/' | tee /etc/apt/sources.list.d/obiba.list && \
   apt-get update && \
-  DEBIAN_FRONTEND=noninteractive apt-get install -y --allow-unauthenticated  opal-rserver
+  DEBIAN_FRONTEND=noninteractive apt-get install -y opal-rserver
 
 RUN chmod +x /usr/share/rserver/bin/rserver
 
