@@ -28,6 +28,13 @@ ENV LC_ALL C.UTF-8
 ENV RSERVER_HOME=/srv
 ENV JAVA_OPTS=-Xmx2G
 
+# Install latest R
+RUN \
+  echo 'deb http://cran.rstudio.com/bin/linux/debian jessie-cran3/' | tee /etc/apt/sources.list.d/r.list && \
+  apt-key adv --keyserver keys.gnupg.net --recv-key 6212B7B7931C4BB16280BA1306F90DE5381BA480 && \
+  apt-get update && \
+  DEBIAN_FRONTEND=noninteractive apt-get install -y r-base
+
 # Install R Server for Opal
 RUN \
   apt-get update && \
