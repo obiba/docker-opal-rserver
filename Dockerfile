@@ -10,16 +10,34 @@ FROM openjdk:8
 MAINTAINER OBiBa <dev@obiba.org>
 
 # grab gosu for easy step-down from root
-ENV GOSU_VERSION 1.7
-RUN set -x \
-	&& wget -q -O /usr/local/bin/gosu "https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-$(dpkg --print-architecture)" \
-	&& wget -q -O /usr/local/bin/gosu.asc "https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-$(dpkg --print-architecture).asc" \
-	&& export GNUPGHOME="$(mktemp -d)" \
-	&& gpg --keyserver ha.pool.sks-keyservers.net --recv-keys B42F6819007F00F88E364FD4036A9C25BF357DD4 \
-	&& gpg --batch --verify /usr/local/bin/gosu.asc /usr/local/bin/gosu \
-	&& rm -r "$GNUPGHOME" /usr/local/bin/gosu.asc \
-	&& chmod +x /usr/local/bin/gosu \
-	&& gosu nobody true
+# see https://github.com/tianon/gosu/blob/master/INSTALL.md
+ENV GOSU_VERSION 1.10
+ENV GOSU_KEY B42F6819007F00F88E364FD4036A9C25BF357DD4
+RUN set -ex; \
+  \
+  fetchDeps=' \
+    ca-certificates \
+    wget \
+  '; \
+  apt-get update; \
+  apt-get install -y --no-install-recommends $fetchDeps; \
+  rm -rf /var/lib/apt/lists/*; \
+  \
+  dpkgArch="$(dpkg --print-architecture | awk -F- '{ print $NF }')"; \
+  wget -O /usr/local/bin/gosu "https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-$dpkgArch"; \
+  wget -O /usr/local/bin/gosu.asc "https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-$dpkgArch.asc"; \
+  \
+# verify the signature
+  export GNUPGHOME="$(mktemp -d)"; \
+  gpg --keyserver pgp.mit.edu --recv-keys "$GOSU_KEY" || \
+  gpg --keyserver keyserver.pgp.com --recv-keys "$GOSU_KEY" || \
+  gpg --keyserver ha.pool.sks-keyservers.net --recv-keys "$GOSU_KEY"; \
+  gpg --batch --verify /usr/local/bin/gosu.asc /usr/local/bin/gosu; \
+  rm -rf "$GNUPGHOME" /usr/local/bin/gosu.asc; \
+  \
+  chmod +x /usr/local/bin/gosu; \
+# verify that the binary works
+  gosu nobody true;
 
 ENV LANG C.UTF-8
 ENV LANGUAGE C.UTF-8
@@ -31,7 +49,7 @@ ENV JAVA_OPTS=-Xmx2G
 # Install latest R
 RUN \
   echo 'deb http://cran.rstudio.com/bin/linux/debian jessie-cran3/' | tee /etc/apt/sources.list.d/r.list && \
-  apt-key adv --keyserver keys.gnupg.net --recv-key 6212B7B7931C4BB16280BA1306F90DE5381BA480 && \
+  apt-key adv --keyserver keys.gnupg.net --recv-key E19F5F87128899B192B1A2C2AD5F960A256A04AF && \
   apt-get update && \
   DEBIAN_FRONTEND=noninteractive apt-get install -y r-base
 
@@ -39,8 +57,8 @@ RUN \
 RUN \
   apt-get update && \
   DEBIAN_FRONTEND=noninteractive apt-get install -y apt-transport-https && \
-  wget -q -O - https://pkg.obiba.org/obiba.org.key | apt-key add - && \
-  echo 'deb https://pkg.obiba.org unstable/' | tee /etc/apt/sources.list.d/obiba.list && \
+  apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 379CE192D401AB61 && \
+  echo 'deb https://dl.bintray.com/obiba/deb all main' | tee /etc/apt/sources.list.d/obiba.list && \
   apt-get update && \
   DEBIAN_FRONTEND=noninteractive apt-get install -y opal-rserver
 
