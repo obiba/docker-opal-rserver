@@ -5,7 +5,7 @@
 #
 
 # Pull base image
-FROM openjdk:8
+FROM openjdk:7
 
 MAINTAINER OBiBa <dev@obiba.org>
 
@@ -48,7 +48,7 @@ ENV JAVA_OPTS=-Xmx2G
 
 # Install latest R
 RUN \
-  echo 'deb http://cran.rstudio.com/bin/linux/debian jessie-cran3/' | tee /etc/apt/sources.list.d/r.list && \
+  echo 'deb http://cran.rstudio.com/bin/linux/debian jessie-cran35/' | tee /etc/apt/sources.list.d/r.list && \
   apt-key adv --keyserver keys.gnupg.net --recv-key E19F5F87128899B192B1A2C2AD5F960A256A04AF && \
   apt-get update && \
   DEBIAN_FRONTEND=noninteractive apt-get install -y r-base
@@ -57,7 +57,7 @@ RUN \
 RUN \
   apt-get update && \
   DEBIAN_FRONTEND=noninteractive apt-get install -y apt-transport-https && \
-  apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 379CE192D401AB61 && \
+  apt-key adv --keyserver keys.gnupg.net --recv-keys 379CE192D401AB61 && \
   echo 'deb https://dl.bintray.com/obiba/deb all main' | tee /etc/apt/sources.list.d/obiba.list && \
   apt-get update && \
   DEBIAN_FRONTEND=noninteractive apt-get install -y opal-rserver
