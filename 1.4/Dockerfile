@@ -64,6 +64,9 @@ RUN \
   apt-get update && \
   DEBIAN_FRONTEND=noninteractive apt-get install -y rserver-admin=$(apt-cache madison rserver-admin | cut -d ' ' -f 3 | grep ${RSERVER_ADMIN_VERSION}-b) opal-rserver
 
+# Make sure latest Rserve is installed
+RUN Rscript -e "install.packages('Rserve', repos='http://cran.rstudio.com')"
+
 RUN chmod +x /usr/share/rserver/bin/rserver
 
 COPY bin /opt/obiba/bin
