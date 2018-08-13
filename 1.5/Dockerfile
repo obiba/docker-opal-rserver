@@ -62,7 +62,7 @@ RUN \
   apt-key adv --keyserver keys.gnupg.net --recv-keys 379CE192D401AB61 && \
   echo 'deb https://dl.bintray.com/obiba/deb all main' | tee /etc/apt/sources.list.d/obiba.list && \
   apt-get update && \
-  DEBIAN_FRONTEND=noninteractive apt-get install -y rserver-admin=$(apt-cache madison rserver-admin | cut -d ' ' -f 3 | grep ${RSERVER_ADMIN_VERSION}-b) opal-rserver
+  DEBIAN_FRONTEND=noninteractive apt-get install -y rserver-admin=${RSERVER_ADMIN_VERSION} opal-rserver
 
 # Make sure latest Rserve is installed
 RUN Rscript -e "install.packages('Rserve', repos='http://cran.rstudio.com')"
