@@ -12,4 +12,4 @@ build-version:
 	sudo docker build --no-cache=$(no_cache) -t="obiba/opal-rserver:$(version)" $(version)
 
 run:
-	sudo docker run -d -p 6612:6312 -p 6611:6311 --name rserver obiba/opal-rserver:snapshot
+	sudo docker run -d -p 6312:6312 -p 6311:6311 -p 53000-53100:53000-53100 --name rserver obiba/opal-rserver:snapshot
