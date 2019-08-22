@@ -20,14 +20,14 @@ ENV JAVA_OPTS=-Xmx2G
 ENV RSERVER_ADMIN_VERSION 1.6.0
 ENV RSERVE_VERSION 1.8-6
 ENV RSERVE_PORT_MIN 53000
-ENV RSERVE_PORT_MAX 53100
+ENV RSERVE_PORT_MAX 53200
 
 # Install latest R and system dependencies
 RUN \
   echo 'deb http://cran.r-project.org/bin/linux/debian stretch-cran35/' | tee /etc/apt/sources.list.d/r.list && \
   apt-key adv --no-tty --keyserver keys.gnupg.net --recv-key E19F5F87128899B192B1A2C2AD5F960A256A04AF && \
   apt-get update && \
-  DEBIAN_FRONTEND=noninteractive apt-get install -y r-base libcurl4-openssl-dev libssl-dev libxml2-dev libcairo-dev freeglut3-dev pandoc texlive-latex-base texlive-fonts-recommended texlive-latex-extra cargo
+  DEBIAN_FRONTEND=noninteractive apt-get install -y r-base libcurl4-openssl-dev libssl-dev libxml2-dev libcairo-dev freeglut3-dev pandoc texlive-latex-base texlive-fonts-recommended texlive-latex-extra cargo libmagick++-dev
 
 # Install R Server admin
 RUN set -x && \
