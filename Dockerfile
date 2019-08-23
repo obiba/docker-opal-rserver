@@ -6,7 +6,7 @@
 
 FROM obiba/docker-gosu:latest AS gosu
 
-FROM openjdk:8-jre-stretch AS server-released
+FROM obiba/obiba-r:latest
 
 LABEL OBiBa <dev@obiba.org>
 
@@ -22,13 +22,6 @@ ENV RSERVE_VERSION 1.8-6
 ENV RSERVE_PORT_MIN 53000
 ENV RSERVE_PORT_MAX 53200
 
-# Install latest R and system dependencies
-RUN \
-  echo 'deb http://cran.r-project.org/bin/linux/debian stretch-cran35/' | tee /etc/apt/sources.list.d/r.list && \
-  apt-key adv --no-tty --keyserver keys.gnupg.net --recv-key E19F5F87128899B192B1A2C2AD5F960A256A04AF && \
-  apt-get update && \
-  DEBIAN_FRONTEND=noninteractive apt-get install -y r-base libcurl4-openssl-dev libssl-dev libxml2-dev libcairo-dev freeglut3-dev pandoc texlive-latex-base texlive-fonts-recommended texlive-latex-extra cargo libmagick++-dev
-
 # Install R Server admin
 RUN set -x && \
   cd /usr/share/ && \
@@ -36,9 +29,6 @@ RUN set -x && \
   unzip -q rserver-admin.zip && \
   rm rserver-admin.zip && \
   mv rserver-admin-${RSERVER_ADMIN_VERSION} rserver
-
-# Install additional R packages (see opal-rserver package)
-RUN Rscript -e "install.packages(c('opal', 'opalr', 'tidyverse', 'knitr', 'rmarkdown'), repos=c('https://cloud.r-project.org', 'https://cran.obiba.org'), dependencies=TRUE, lib='/usr/local/lib/R/site-library')"
 
 # Make sure latest known Rserve is installed with fork port range hack
 RUN wget -q https://www.rforge.net/src/contrib/Rserve_${RSERVE_VERSION}.tar.gz && \
