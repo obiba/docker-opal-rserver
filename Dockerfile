@@ -52,6 +52,9 @@ RUN adduser --system --home $RSERVER_HOME --no-create-home --disabled-password r
 RUN chmod +x -R /opt/obiba/bin && chown -R rserver:adm $RSERVER_HOME
 RUN chown -R rserver:adm /opt/obiba
 
+# Additional system dependencies
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y libsasl2-dev
+
 VOLUME /srv
 
 EXPOSE 6312 6311
