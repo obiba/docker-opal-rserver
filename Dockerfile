@@ -53,7 +53,9 @@ RUN chmod +x -R /opt/obiba/bin && chown -R rserver:adm $RSERVER_HOME
 RUN chown -R rserver:adm /opt/obiba
 
 # Additional system dependencies
-RUN DEBIAN_FRONTEND=noninteractive apt-get install -y libsasl2-dev
+RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y libsasl2-dev libssh-dev libmariadbclient-dev libpq-dev
+RUN Rscript -e "install.packages(c('devtools'), repos=c('https://cloud.r-project.org'), dependencies=TRUE, lib='/usr/local/lib/R/site-library')"
+RUN Rscript -e "devtools::install_github('obiba/resourcer', repos=c('https://cloud.r-project.org'), dependencies=TRUE, lib='/usr/local/lib/R/site-library')"
 
 VOLUME /srv
 
