@@ -53,10 +53,13 @@ RUN chmod +x -R /opt/obiba/bin && chown -R rserver:adm $RSERVER_HOME
 RUN chown -R rserver:adm /opt/obiba
 
 # Additional system dependencies
-RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y libsasl2-dev libssh-dev libmariadbclient-dev libpq-dev
-RUN Rscript -e "install.packages(c('devtools', 'BiocManager'), repos=c('https://cloud.r-project.org'), dependencies=TRUE, lib='/usr/local/lib/R/site-library')"
+RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y libsasl2-dev libssh-dev libmariadbclient-dev libpq-dev libsodium-dev libgit2-dev libssh2-1-dev
+RUN Rscript -e "update.packages(ask = FALSE, repos = c('https://cloud.r-project.org'), instlib = '/usr/local/lib/R/site-library')"
+RUN Rscript -e "install.packages(c('gh', 'devtools', 'BiocManager'), repos=c('https://cloud.r-project.org'), dependencies=TRUE, lib='/usr/local/lib/R/site-library')"
 RUN Rscript -e "devtools::install_github('obiba/resourcer', repos=c('https://cloud.r-project.org'), dependencies=TRUE, lib='/usr/local/lib/R/site-library')"
-RUN Rscript -e "BiocManager::install('Biobase')"
+RUN Rscript -e "BiocManager::install(c('Biobase','GWASTools', 'limma', 'SummarizedExperiment', 'SNPRelate', 'GENESIS', 'MEAL'), ask = FALSE, dependencies=TRUE, lib='/usr/local/lib/R/site-library')"
+RUN Rscript -e "devtools::install_github('perishky/meffil', repos=c('https://cloud.r-project.org'), dependencies=TRUE, lib='/usr/local/lib/R/site-library')"
+RUN Rscript -e "install.packages('unixtools', repos = 'http://www.rforge.net/')"
 
 VOLUME /srv
 
