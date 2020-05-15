@@ -6,7 +6,7 @@
 
 FROM obiba/docker-gosu:latest AS gosu
 
-FROM obiba/obiba-r:latest
+FROM obiba/obiba-r:3.6
 
 LABEL OBiBa <dev@obiba.org>
 
@@ -53,13 +53,11 @@ RUN chmod +x -R /opt/obiba/bin && chown -R rserver:adm $RSERVER_HOME
 RUN chown -R rserver:adm /opt/obiba
 
 # Additional system dependencies
-RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y libsasl2-dev libssh-dev libmariadbclient-dev libpq-dev libsodium-dev libgit2-dev libssh2-1-dev
+RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y libsasl2-dev libssh-dev libmariadbclient-dev libpq-dev libsodium-dev libgit2-dev libssh2-1-dev libgdal-dev gdal-bin libproj-dev proj-data proj-bin libgeos-dev
 RUN Rscript -e "update.packages(ask = FALSE, repos = c('https://cloud.r-project.org'), instlib = '/usr/local/lib/R/site-library')"
-RUN Rscript -e "install.packages(c('gh', 'devtools', 'BiocManager'), repos=c('https://cloud.r-project.org'), dependencies=TRUE, lib='/usr/local/lib/R/site-library')"
-RUN Rscript -e "devtools::install_github('obiba/resourcer', repos=c('https://cloud.r-project.org'), dependencies=TRUE, lib='/usr/local/lib/R/site-library')"
-RUN Rscript -e "BiocManager::install(c('Biobase','GWASTools', 'limma', 'SummarizedExperiment', 'SNPRelate', 'GENESIS', 'MEAL'), ask = FALSE, dependencies=TRUE, lib='/usr/local/lib/R/site-library')"
-RUN Rscript -e "devtools::install_github('perishky/meffil', repos=c('https://cloud.r-project.org'), dependencies=TRUE, lib='/usr/local/lib/R/site-library')"
-RUN Rscript -e "install.packages('unixtools', repos = 'http://www.rforge.net/')"
+RUN Rscript -e "install.packages(c('gh', 'Cairo', 'multcomp', 'lme4', 'betareg', 'modeltools', 'mvtnorm', 'TH.data', 'nloptr', 'flexmix'), repos=c('https://cloud.r-project.org'), dependencies=TRUE, lib='/usr/local/lib/R/site-library')"
+RUN Rscript -e "BiocManager::install(c('Biobase','GWASTools', 'limma', 'SummarizedExperiment', 'SNPRelate', 'GENESIS', 'MEAL', 'CopyNumber450kData'), ask = FALSE, dependencies=TRUE, lib='/usr/local/lib/R/site-library')"
+RUN Rscript -e "devtools::install_github('perishky/meffil', repos=c('https://cloud.r-project.org'), lib='/usr/local/lib/R/site-library')"
 
 VOLUME /srv
 
