@@ -28,7 +28,8 @@ RUN set -x && \
   wget -q -O rserver-admin.zip https://github.com/obiba/rserver-admin/releases/download/${RSERVER_ADMIN_VERSION}/rserver-admin-${RSERVER_ADMIN_VERSION}-dist.zip && \
   unzip -q rserver-admin.zip && \
   rm rserver-admin.zip && \
-  mv rserver-admin-${RSERVER_ADMIN_VERSION} rserver
+  mv rserver-admin-${RSERVER_ADMIN_VERSION} rserver && \
+  ln -s /usr/share/rserver /var/lib/rserver # for Rprofile.R legacy
 
 # Make sure latest known Rserve is installed with fork port range hack
 RUN wget -q https://www.rforge.net/src/contrib/Rserve_${RSERVE_VERSION}.tar.gz && \
