@@ -18,7 +18,7 @@ ENV RSERVER_HOME=/srv
 ENV JAVA_OPTS=-Xmx2G
 
 ENV RSERVER_ADMIN_VERSION 1.6.0
-ENV RSERVE_VERSION 1.8-6
+ENV RSERVE_VERSION 1.8-7
 ENV RSERVE_PORT_MIN 53000
 ENV RSERVE_PORT_MAX 53200
 
@@ -32,7 +32,7 @@ RUN set -x && \
   ln -s /usr/share/rserver /var/lib/rserver # for Rprofile.R legacy
 
 # Make sure latest known Rserve is installed with fork port range hack
-RUN wget -q https://www.rforge.net/src/contrib/Rserve_${RSERVE_VERSION}.tar.gz && \
+RUN wget -q https://www.rforge.net/Rserve/snapshot/Rserve_${RSERVE_VERSION}.tar.gz && \
   tar -xf Rserve_${RSERVE_VERSION}.tar.gz && \
   rm Rserve_${RSERVE_VERSION}.tar.gz && \
   sed -i "s/32768)>65000/${RSERVE_PORT_MIN})>${RSERVE_PORT_MAX}/" Rserve/src/Rserv.c && \
